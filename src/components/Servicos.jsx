@@ -1,34 +1,35 @@
 import { motion } from "framer-motion";
+import { FiCamera, FiSmartphone, FiFilm, FiPenTool, FiSettings, FiCalendar } from "react-icons/fi";
 import SectionWrapper from "./SectionWrapper";
 
 const servicos = [
   {
-    icon: "📷",
+    Icon: FiCamera,
     titulo: "Feed",
     descricao: "Planejamento e criação visual do feed",
   },
   {
-    icon: "📱",
+    Icon: FiSmartphone,
     titulo: "Stories",
     descricao: "Conteúdos dinâmicos para stories",
   },
   {
-    icon: "🎬",
+    Icon: FiFilm,
     titulo: "Reels",
     descricao: "Roteiro e edição de reels estratégicos",
   },
   {
-    icon: "🎨",
+    Icon: FiPenTool,
     titulo: "Identidade Visual",
     descricao: "Criação de identidade para redes sociais",
   },
   {
-    icon: "⚙️",
+    Icon: FiSettings,
     titulo: "Gestão de Perfil",
     descricao: "Gerenciamento completo do seu Instagram",
   },
   {
-    icon: "📅",
+    Icon: FiCalendar,
     titulo: "Planejamento de Conteúdo",
     descricao: "Calendário editorial personalizado",
   },
@@ -48,11 +49,9 @@ export default function Servicos() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4, delay: i * 0.1 }}
-            className="group bg-surface border border-gray-100 rounded-2xl p-8 text-center cursor-default transition-all duration-300 hover:bg-gradient-to-br hover:from-primary hover:to-secondary hover:border-transparent hover:shadow-lg"
+            className="group bg-surface border border-text/10 rounded-2xl p-8 text-center cursor-default transition-colors duration-300 hover:bg-primary hover:border-primary"
           >
-            <span className="text-4xl block mb-4 group-hover:scale-110 transition-transform">
-              {s.icon}
-            </span>
+            <s.Icon className="w-8 h-8 mx-auto mb-4 text-primary group-hover:text-white transition-colors" strokeWidth={1.5} />
             <h3 className="text-xl font-bold mb-2 group-hover:text-white transition-colors">
               {s.titulo}
             </h3>

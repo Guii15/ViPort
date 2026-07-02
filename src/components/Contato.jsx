@@ -34,7 +34,9 @@ export default function Contato() {
           Instagram
         </a>
         <a
-          href="mailto:vitoryacs55@gmail.com"
+          href="https://mail.google.com/mail/?view=cm&fs=1&to=vitoryacs55@gmail.com"
+          target="_blank"
+          rel="noopener noreferrer"
           className="flex items-center gap-3 bg-primary text-white px-8 py-4 rounded-full font-semibold text-lg hover:opacity-90 transition-opacity"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
