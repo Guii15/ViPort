@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import vitoryaPhoto from "../assets/Vitorya.jpeg";
 
 export default function Hero() {
   return (
@@ -54,20 +55,27 @@ export default function Hero() {
             initial={{ opacity: 0, rotate: 20 }}
             animate={{ opacity: 1, rotate: 10 }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="absolute w-40 h-48 md:w-48 md:h-56 border-2 border-text/15 rounded-2xl bottom-0 right-4 md:right-8"
-          />
+            className="absolute w-40 h-48 md:w-48 md:h-56 border-2 border-text/15 rounded-2xl bottom-0 right-4 md:right-8 bg-surface/70 backdrop-blur-sm p-5 flex flex-col justify-center gap-2"
+          >
+            <span className="font-heading text-4xl text-primary leading-none">
+              "
+            </span>
+            <p className="font-heading italic text-text text-sm leading-snug">
+              Criar é traduzir uma marca em algo que as pessoas sentem vontade
+              de parar pra ver.
+            </p>
+          </motion.div>
           <motion.div
             initial={{ opacity: 0, scale: 0.85, rotate: 8 }}
             animate={{ opacity: 1, scale: 1, rotate: 3 }}
             transition={{ duration: 0.7, delay: 0.4 }}
-            className="absolute w-48 h-60 md:w-56 md:h-72 bg-surface border border-text/10 rounded-2xl shadow-xl flex flex-col items-center justify-center gap-1"
+            className="absolute w-48 h-60 md:w-56 md:h-72 bg-surface border border-text/10 rounded-2xl shadow-xl overflow-hidden"
           >
-            <span className="font-heading text-6xl md:text-7xl font-bold text-primary">
-              VS
-            </span>
-            <span className="text-text-muted text-xs uppercase tracking-widest">
-              Vitorya Silva
-            </span>
+            <img
+              src={vitoryaPhoto}
+              alt="Vitorya Silva"
+              className="w-full h-full object-cover"
+            />
           </motion.div>
           <motion.div
             initial={{ opacity: 0, rotate: 4, y: 10 }}

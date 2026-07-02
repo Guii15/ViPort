@@ -15,7 +15,7 @@ export default function Footer() {
 
         <div className="flex gap-4">
           <a
-            href="https://www.instagram.com/_vitoryacs_/"
+            href="https://www.instagram.com/vitoryamkt"
             target="_blank"
             rel="noopener noreferrer"
             className="text-white/60 hover:text-white transition-colors"
@@ -37,7 +37,9 @@ export default function Footer() {
             </svg>
           </a>
           <a
-            href="mailto:vitoryacs55@gmail.com"
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=vitoryacassia55@gmail.com"
+            target="_blank"
+            rel="noopener noreferrer"
             className="text-white/60 hover:text-white transition-colors"
             aria-label="Email"
           >

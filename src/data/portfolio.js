@@ -1,6 +1,5 @@
 export const portfolioItems = [
   { id: 1, image: null, caption: "Arte em breve", instagramUrl: "https://www.instagram.com/p/DZDk9gnCeR1/" },
-  { id: 2, image: null, caption: "Arte em breve", instagramUrl: "https://www.instagram.com/p/DZ2U0A1oBe1/" },
   { id: 3, image: null, caption: "Arte em breve", instagramUrl: "https://www.instagram.com/p/DZYWV4AEUHs/" },
   { id: 4, image: null, caption: "Arte em breve", instagramUrl: "https://www.instagram.com/p/DX7DYo0DBXq/" },
   { id: 5, image: null, caption: "Arte em breve", instagramUrl: "https://www.instagram.com/p/DY4oMUNkY5I/" },
