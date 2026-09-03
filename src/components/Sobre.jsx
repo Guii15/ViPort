@@ -14,9 +14,9 @@ export default function Sobre() {
         Sobre <span className="text-primary">mim</span>
       </h2>
       <p className="text-text-muted text-lg text-center max-w-2xl mx-auto leading-relaxed">
-        Olá! Sou Vitorya, Social Media apaixonada por transformar ideias em
-        conteúdo que gera conexão real. Trabalho com marcas que querem crescer de
-        forma autêntica nas redes sociais.
+        Olá! Sou Vitorya, Social Media e Designer Gráfica apaixonada por
+        transformar ideias em conteúdo que gera conexão real. Trabalho com
+        marcas que querem crescer de forma autêntica nas redes sociais.
       </p>
       <div className="grid sm:grid-cols-2 gap-4 mt-10 max-w-2xl mx-auto">
         {diferenciais.map((item) => (
