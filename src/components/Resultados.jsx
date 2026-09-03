@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { motion, useInView } from "framer-motion";
-import SectionWrapper from "./SectionWrapper";
 
 function Counter({ end, suffix = "", label }) {
   const ref = useRef(null);

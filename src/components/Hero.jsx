@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import vitoryaPhoto from "../assets/Vitorya.jpeg";
+import vitoryaPhoto from "../assets/Vitorya.webp";
 
 export default function Hero() {
   return (

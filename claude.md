@@ -8,9 +8,9 @@ Tema: Claro (branco/off-white) com acentos Roxo (#7C3AED) e Coral (#FF6B6B)
 ## Identidade
 - Nome: Vitorya de Cassia Silva
 - Tagline: "Criando conteúdo que conecta"
-- Email: vitoryacs55@gmail.com
+- Email: vitoryacassia55@gmail.com
 - WhatsApp: +55 35 99702-4823
-- Instagram: https://www.instagram.com/_vitoryacs_/
+- Instagram: https://www.instagram.com/vitoryamkt/
 - Foto: sem foto por enquanto, usar placeholder com as iniciais "VS" estilizado
 
 ## Paleta de Cores

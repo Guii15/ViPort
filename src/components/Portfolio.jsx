@@ -1,64 +1,195 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { FiChevronLeft, FiChevronRight } from "react-icons/fi";
 import SectionWrapper from "./SectionWrapper";
-import InstagramEmbed from "./InstagramEmbed";
-import { portfolioItems } from "../data/portfolio";
+import { portfolioItems, instagramHandle } from "../data/portfolio";
+
+const AUTOPLAY_MS = 4000;
+const RESUME_AFTER_MS = 6000;
+const DESKTOP_QUERY = "(min-width: 768px)";
+
+const portfolioImages = import.meta.glob("../assets/portfolio/*.webp", {
+  eager: true,
+  import: "default",
+});
+
+function resolveImage(localImage) {
+  if (!localImage) return undefined;
+  return portfolioImages[`../assets/portfolio/${localImage}`];
+}
+
+function useItemsPerView() {
+  const [itemsPerView, setItemsPerView] = useState(() =>
+    window.matchMedia(DESKTOP_QUERY).matches ? 3 : 1
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const handler = () => setItemsPerView(mql.matches ? 3 : 1);
+    mql.addEventListener("change", handler);
+    return () => mql.removeEventListener("change", handler);
+  }, []);
+
+  return itemsPerView;
+}
+
+function PortfolioSlide({ item }) {
+  const imageSrc = resolveImage(item.localImage);
+  const [failed, setFailed] = useState(false);
+  const showFallback = !imageSrc || failed;
+
+  return (
+    <div className="flex flex-col rounded-xl overflow-hidden border border-text/10 bg-surface shadow-sm h-full">
+      <div className="aspect-square w-full">
+        {showFallback ? (
+          <div
+            className={`w-full h-full flex items-center justify-center text-white font-semibold text-lg ${
+              item.id % 2 === 0 ? "bg-secondary/80" : "bg-primary/80"
+            }`}
+          >
+            {item.caption}
+          </div>
+        ) : (
+          <img
+            src={imageSrc}
+            alt={item.caption}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
+      <div className="flex items-center justify-between gap-3 p-4">
+        <span className="text-text-muted text-sm font-medium">
+          @{instagramHandle}
+        </span>
+        <a
+          href={item.instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="bg-primary text-white px-4 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-opacity whitespace-nowrap"
+        >
+          Ver no Instagram
+        </a>
+      </div>
+    </div>
+  );
+}
 
 export default function Portfolio() {
+  const itemsPerView = useItemsPerView();
+  const maxIndex = Math.max(0, portfolioItems.length - itemsPerView);
+
+  const [rawIndex, setRawIndex] = useState(0);
+  const index = Math.min(rawIndex, maxIndex);
+  const [hovering, setHovering] = useState(false);
+  const [interacting, setInteracting] = useState(false);
+  const interactionTimer = useRef(null);
+
+  useEffect(() => () => clearTimeout(interactionTimer.current), []);
+
+  const pauseForInteraction = useCallback(() => {
+    setInteracting(true);
+    clearTimeout(interactionTimer.current);
+    interactionTimer.current = setTimeout(
+      () => setInteracting(false),
+      RESUME_AFTER_MS
+    );
+  }, []);
+
+  const paused = hovering || interacting;
+
+  useEffect(() => {
+    if (paused || maxIndex === 0) return;
+    const timer = setInterval(() => {
+      setRawIndex((i) => (Math.min(i, maxIndex) >= maxIndex ? 0 : Math.min(i, maxIndex) + 1));
+    }, AUTOPLAY_MS);
+    return () => clearInterval(timer);
+  }, [paused, maxIndex]);
+
+  const goPrev = () => {
+    setRawIndex(index <= 0 ? maxIndex : index - 1);
+    pauseForInteraction();
+  };
+
+  const goNext = () => {
+    setRawIndex(index >= maxIndex ? 0 : index + 1);
+    pauseForInteraction();
+  };
+
+  const goToPage = (page) => {
+    setRawIndex(Math.min(page * itemsPerView, maxIndex));
+    pauseForInteraction();
+  };
+
+  const totalPages = Math.ceil(portfolioItems.length / itemsPerView);
+  const currentPage = Math.round(index / itemsPerView);
+
   return (
     <SectionWrapper id="portfolio">
       <h2 className="font-heading text-4xl font-bold text-center mb-12">
         Trabalhos que{" "}
         <span className="text-primary">falam por si</span>
       </h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-        {portfolioItems.map((item, i) => {
-          const hasRealLink = item.instagramUrl && item.instagramUrl !== "#";
 
-          if (hasRealLink) {
-            return (
-              <motion.div
-                key={item.id}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: i * 0.05 }}
-                className="relative rounded-xl overflow-hidden"
-              >
-                <InstagramEmbed url={item.instagramUrl} />
-              </motion.div>
-            );
-          }
-
-          return (
-            <motion.a
-              key={item.id}
-              href={item.instagramUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.4, delay: i * 0.05 }}
-              className="group relative aspect-square rounded-xl overflow-hidden"
-            >
+      <div
+        className="relative"
+        onMouseEnter={() => setHovering(true)}
+        onMouseLeave={() => setHovering(false)}
+      >
+        <div className="overflow-hidden">
+          <motion.div
+            className="flex"
+            animate={{ x: `-${index * (100 / itemsPerView)}%` }}
+            transition={{ type: "tween", duration: 0.5, ease: "easeInOut" }}
+          >
+            {portfolioItems.map((item, i) => (
               <div
-                className={`w-full h-full flex items-center justify-center text-white font-semibold text-lg ${
-                  item.id % 2 === 0
-                    ? "bg-secondary/80"
-                    : "bg-primary/80"
-                }`}
+                key={item.id}
+                className="shrink-0 px-2"
+                style={{ width: `${100 / itemsPerView}%` }}
               >
-                {item.caption}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.05 }}
+                  className="h-full"
+                >
+                  <PortfolioSlide item={item} />
+                </motion.div>
               </div>
-              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
-                <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z" />
-                </svg>
-                <span className="text-white text-sm font-medium">Ver no Instagram</span>
-              </div>
-            </motion.a>
-          );
-        })}
+            ))}
+          </motion.div>
+        </div>
+
+        <button
+          onClick={goPrev}
+          aria-label="Anterior"
+          className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1/2 md:-translate-x-4 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
+        >
+          <FiChevronLeft className="w-5 h-5" />
+        </button>
+        <button
+          onClick={goNext}
+          aria-label="Próximo"
+          className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 md:translate-x-4 w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center shadow-md hover:opacity-90 transition-opacity"
+        >
+          <FiChevronRight className="w-5 h-5" />
+        </button>
+      </div>
+
+      <div className="flex justify-center gap-2 mt-6">
+        {Array.from({ length: totalPages }).map((_, page) => (
+          <button
+            key={page}
+            onClick={() => goToPage(page)}
+            aria-label={`Ir para página ${page + 1}`}
+            className={`w-2.5 h-2.5 rounded-full transition-colors ${
+              page === currentPage ? "bg-secondary" : "bg-primary/30"
+            }`}
+          />
+        ))}
       </div>
     </SectionWrapper>
   );
